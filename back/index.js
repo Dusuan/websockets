@@ -8,6 +8,7 @@ app.use(cors());
 
 const server = http.createServer(app);
 
+// Initialize Socket.io with specific CORS rules for the frontend (Vite's default port)
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:5173",
@@ -16,31 +17,40 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
+  // Grab the username passed from the client
   const username = socket.handshake.query.username;
 
   console.log(`user ${username} connected`);
   
-  socket.on("disconnect", (data) => {
-    console.log(`user ${username} disconnected`);
-      io.emit("message", {
-      id: data.id,
+  // Notify the chat room when someone disconnects
+  socket.on("disconnect", (reason) => {
+    console.log(`user ${username} disconnected. Reason : ${reason}`);
+    
+    // Broadcast exit message via the 'Pepi-bot' account
+    io.emit("message", {
+      id: socket.id, 
       username: "Pepi-bot",
       text: `${username} has left the chat`,
     });
   });
   
+  // Listen for incoming chat messages
   socket.on("send-message", (data) => {
+    // Structure the payload—using the socket's unique ID for tracking
     const messageData = {
       id: socket.id,
       username: data.username,
       text: data.text,
     };
+    
     console.log("Received message:", messageData);
+    
+    // Send the message back out to every connected client (including the sender)
     io.emit("message", messageData);
   });
-
 });
 
+// Sart server
 server.listen(3001, () => {
   console.log("SERVER IS RUNNING");
 });
