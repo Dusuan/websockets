@@ -1,14 +1,13 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route, Link } from "react-router-dom";
+import Landing from './Landing'
+import Chat from './Chat'
 
 function App() {
   return (
-    <div className="bg-green-500 min-w-full min-h-screen">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <Routes>
+      <Route path="/" element={<Landing/>} />
+      <Route path="/chat" element={<Chat/>} />
+    </Routes>
   )
 }
 
