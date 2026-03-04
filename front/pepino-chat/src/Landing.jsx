@@ -20,6 +20,7 @@ function Landing() {
                 <textarea placeholder="Escribe tu nombre de usuario" 
                 className="bg-white text-4xl overflow-hidden" 
                 value={username}
+                maxLength={20}
                 onChange={(e) => setUsername(e.target.value)}
                 />
             </div>
