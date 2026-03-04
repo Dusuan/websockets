@@ -13,6 +13,7 @@ function Chat() {
 
     const socketRef = useRef(null);
     const bottomRef = useRef(null);
+    const chatRef = useRef(null);
 
     useEffect(() => {
         if (!username) {
@@ -37,12 +38,15 @@ function Chat() {
         socket.on("message", (data) => {
             setMessages((prev) => [...prev, data]);
         });
-        
 
         return () => {
             socket.disconnect();
         };
     }, [username, navigate]);
+
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
 
     const sendMessage = () => {
         if (input.trim() === "" || !socketRef.current) return;
@@ -68,14 +72,19 @@ function Chat() {
             <h1 className="text-4xl"> Usuario: {username}</h1>
             <p>{connected ? "Conectado al servidor 👀" : "Desconectado del servidor 🥺"}</p>
 
-            <div style={{
-                height: 400,
-                overflowY: "auto",
-                border: "5px solid #ccc",
-                padding: 8,
-                marginTop: 8,
-                backgroundColor: "#9bd872"
-            }}>
+            <div
+                ref={chatRef}
+                style={{
+                    height: 700,
+                    overflowY: "auto",
+                    border: "5px solid #ccc",
+                    padding: 8,
+                    marginTop: 8,
+                    backgroundImage: "url('/fondo2.png')",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat"
+                }}>
                 {messages.map((msg, i) => {
                     if (msg.type === "log") {
                         return (
@@ -86,9 +95,29 @@ function Chat() {
                     }
 
                     return (
-                        <p key={i}>
-                            <strong>{msg.username}:</strong> {msg.text}
-                        </p>
+                        <div
+                            key={i}
+                            className={`flex ${
+                                msg.username === username ? "justify-end" : "justify-start"
+                            }`}
+                        >
+                            <div
+                                className={`px-4 py-2 my-1 text-sm rounded-2xl shadow wrap-break-words
+                                max-w-[70%] w-fit
+                                ${
+                                    msg.username === username 
+                                        ? "bg-green-200 rounded-br-md"
+                                        : msg. username === "Pepi-bot" 
+                                        ? "bg-[#38EB70] rounded-bl-md" 
+                                        : "bg-white rounded-bl-md"
+                                }`}
+                            >
+                                <span className="block text-xs font-semibold mb-1 opacity-70">
+                                    {msg.username}
+                                </span>
+                                {msg.text}
+                            </div>
+                        </div>
                     );
                 })}
                 <div ref={bottomRef} />
