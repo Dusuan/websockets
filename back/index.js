@@ -21,6 +21,13 @@ io.on("connection", (socket) => {
   const username = socket.handshake.query.username;
 
   console.log(`user ${username} connected`);
+
+  // Broadcast enter message via the 'Pepi-bot' account
+  io.emit("message", {
+    id: socket.id, 
+    username: "Pepi-bot",
+    text: `${username} has joined the chat`,
+  });
   
   // Notify the chat room when someone disconnects
   socket.on("disconnect", (reason) => {
