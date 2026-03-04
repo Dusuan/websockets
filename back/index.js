@@ -11,7 +11,7 @@ const server = http.createServer(app);
 // Initialize Socket.io with specific CORS rules for the frontend (Vite's default port)
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
@@ -51,6 +51,8 @@ io.on("connection", (socket) => {
 });
 
 // Sart server
-server.listen(3001, () => {
+// Usar "0.0.0.0" le dice a Node.js que escuche peticiones de cualquier dispositivo
+// que llegue a la dirección IP del servidor.
+server.listen(3001,"0.0.0.0", () => {
   console.log("SERVER IS RUNNING");
 });
