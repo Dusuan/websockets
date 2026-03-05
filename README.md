@@ -5,7 +5,7 @@
   - Un intercambio de ping/pong (heartbeat). Si despues de un tiempo establecido de espera no se recibe un pong despues de un ping, se da como desconectado.
     
 ¿Qué problema aparece si dos usuarios envían mensajes al mismo tiempo y cómo lo manejas?
-  - 
+  - El servidor itera sobre todas las conexiones que estan activas y al enviar un mensaje de forma individual, ya que el protocolo hace conexiones punto a punto. 
 
 ¿Qué riesgos de seguridad tendría tu chat y qué harías para mitigarlos?
   - Inyecciones de script (XSS)
